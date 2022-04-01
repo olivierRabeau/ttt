@@ -33,7 +33,19 @@ const updateWins = (player) => {
     play:{
       win:true,
       winner:player
-    }
+    },
+    initGame:true
+  })
+}
+
+const newGame = () => {
+  setCurrent({
+    players : [...current.players],
+    play:{
+      win:false,
+      winner:null
+    },
+    initGame:true
   })
 }
 
@@ -52,7 +64,7 @@ return (
             ></Player> 
         </One>
         <Grid>
-            <GameGrid handleStateWins={updateWins}></GameGrid> 
+            <GameGrid handleStateWins={updateWins} handleNewGame={newGame} newGame={current.initGame}></GameGrid> 
         </Grid>
         <Two>
             <Player
@@ -91,18 +103,6 @@ order:2;
   order:3;                
 }
 `
-
-
-// const Options = styled('div')`
-// display:flex;
-// flex-direction:row;
-// position : absolute;
-// align-items:center;
-// height:40rem;
-// top:20rem;
-// left:0;
-// `
-
 const Form = styled('div')`
 width:20rem;
 height:40rem;
@@ -123,7 +123,6 @@ height:10rem;
   height:5rem;               
 }
 `
-
 const StyledFooter = styled('div')`
 bottom:-20px;
 border-top:1px solid #333333;

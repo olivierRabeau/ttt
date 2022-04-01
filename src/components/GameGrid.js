@@ -11,9 +11,7 @@ import Rules from "./Rules.js"
 
 //Organisation de la grille de jeu
 
-const GameGrid = ({handleStateWins}) => {
-const [message, setMessage] = useState('');
-const [winner, setWinner]=useState({win:false,name:""});
+const GameGrid = ({handleStateWins, handleNewGame, newGame}) => {
 const [selected, setSelected] = useState(0);
 
 // initialisation du State
@@ -47,18 +45,20 @@ if (currentCase.turn%2===0) {
   const tempo = setTimeout(()=>findTheBestOption(currentCase.sequence,currentCase.turn).then(value=>next(value)),500);  
   return ()=>clearTimeout(tempo);
 }
+
 if (winPatternIs(mapSeqToPlayer(currentCase.sequence),"AAA")>0) handleStateWins(0);
 if (winPatternIs(mapSeqToPlayer(currentCase.sequence),"BBB")>0) handleStateWins(1);
+
 },[currentCase.sequence,currentCase.turn]
 );
 
 const initGame = ()=>{
-  
-  setCurrentCase({
+  handleNewGame();
+  return setCurrentCase({
     displays:[...initialDisplays], 
     sequence :[...initialSequence], 
     turn:0
-  })
+  });
 }
 
 const Grid = ()=>{
@@ -107,7 +107,7 @@ const Selected = ()=>{
                   type="button" 
                   onClick={()=>selected===0?setSelected(1):setSelected(0)}
                   style={{color:selected===0?null:"white", boxShadow:selected===0?null:"0 0 10px white"}}
-                  >{selected===0?"Options":"Valider"}</Button> 
+                  >{selected===0?"Options":"Done"}</Button> 
 
       </ControlPanel>
     </Container>   

@@ -6,14 +6,14 @@ const Title = () => {
         start:0
       });
       
-      // useEffect(()=>{       
-      //    if (current.start<100){
-      //       const timer = setTimeout(()=>setCurrent({start:current.start+1}),5);
-      //       return ()=>clearTimeout(timer);
-      //    } 
-      //    const reload = setTimeout(()=>setCurrent({start:0}),10000);
-      //    return ()=>clearTimeout(reload);
-      // },[current]);
+      useEffect(()=>{       
+         if (current.start<100){
+            const timer = setTimeout(()=>setCurrent({start:current.start+1}),5);
+            return ()=>clearTimeout(timer);
+         } 
+         const reload = setTimeout(()=>setCurrent({start:0}),10000);
+         return ()=>clearTimeout(reload);
+      },[current]);
 
 
   return (

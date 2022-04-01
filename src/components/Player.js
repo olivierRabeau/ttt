@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components/macro"
+import { keyframes } from 'styled-components';
 
 const Player = ({picturePath,logoPath,winGames,winGame}) => {
 const [current,setCurrent] =useState({
@@ -13,18 +14,23 @@ useEffect(()=>{
   return (
     <Card>
      
+        
         <StyledHeader >
-            <WinPoint src={current.pointsOnFive>0?logoPath:null}></WinPoint>
-            <WinPoint src={current.pointsOnFive>1?logoPath:null}></WinPoint>
-            <WinPoint src={current.pointsOnFive>2?logoPath:null}></WinPoint>
-            <WinPoint src={current.pointsOnFive>3?logoPath:null}></WinPoint>
-            <WinPoint src={current.pointsOnFive>4?logoPath:null}></WinPoint>
+            <MessageSmall style={{visibility:winGame?"visible":"hidden", color:"yellow"}}>"Win the game"</MessageSmall>
+            <WinPointRow>         
+                <WinPoint src={current.pointsOnFive>0?logoPath:null}></WinPoint>
+                <WinPoint src={current.pointsOnFive>1?logoPath:null}></WinPoint>
+                <WinPoint src={current.pointsOnFive>2?logoPath:null}></WinPoint>
+                <WinPoint src={current.pointsOnFive>3?logoPath:null}></WinPoint>
+                <WinPoint src={current.pointsOnFive>4?logoPath:null}></WinPoint>
+            </WinPointRow>   
         </StyledHeader>
+
         <StyledContent>
         <Picture src={picturePath} id ="Tom"></Picture>
         </StyledContent>
         <StyledFooter>
-          <h2 style={{visibility:winGame?"visible":"hidden"}}>"Win the game"</h2>
+          <Message style={{visibility:winGame?"visible":"hidden", color:"yellow"}}>"Win the game"</Message>
         </StyledFooter>
     </Card>
   )
@@ -45,7 +51,7 @@ align-items:center;
 
 const StyledHeader=styled('div')`
 display:flex;
-flex-direction:row;
+flex-direction:column;
 justify-content:center;
 @media screen and (max-width:1220px) {
   order:2;
@@ -64,7 +70,7 @@ display:flex;
 flex-direction:row;
 justify-content:center;
 @media screen and (max-width:1220px) {
-  order:2;
+  order:0;
 }
 `
 
@@ -85,6 +91,30 @@ border-radius:0.5rem;
   width:2rem;
   margin:0.25rem;
 }
+`
+const blink= keyframes`
+  from{opacity:1;}
+  to{opacity:0}
+`
+const Message=styled('span')`
+animation: ${blink} 0.5s linear alternate;
+animation-iteration-count: infinite;
+font-size:3rem;
+@media screen and (max-width:1220px) {
+display:none;
+}
+`
+const MessageSmall =styled(Message)`
+display:none;
+font-size:1rem;
+@media screen and (max-width:1220px) {
+display:inline;
+}
+`
+
+const WinPointRow = styled('div')`
+dislay:flex;
+flex-direction:row;
 `
 const StyledButton = styled('button')`
 `
