@@ -12,13 +12,17 @@ function App() {
 const [current,setCurrent]=useState({
 players:[
   {
-    picture:"./Tom.png",
-    logo:"./rond.png",
+    picture:"./Jerry.png",
+    logo:"rond.png",
+    movie:"hulk.mp4",
+    speed:0.7,
     wins:0
   },
   {
-    picture:"./Jerry.png",
-    logo:"./cross.png",
+    picture:"./Tom.png",
+    logo:"cross.png",
+    movie:"spidy.mp4",
+    speed:0.5,
     wins:0
   }
 ],
@@ -29,17 +33,25 @@ play:{
 });
 
 const updateWins = (player) => {
-  const playersArray = [...current.players];
-  playersArray[player].wins+=1;
-  setCurrent({
-    players : [...playersArray],
-    play:{
-      win:true,
-      winner:player
-    },
-    initGame:true
-  })
+  if (!current.play.win) {
+      const playersArray = [...current.players];
+      playersArray[player].wins+=1;
+      console.log(playersArray);
+      setCurrent({
+      players : [...playersArray],
+      play:{
+        win:true,
+        winner:player
+      }
+    })
+  }
 }
+
+
+const PLAYER=1;
+const COMPUTER=0;
+const first=1;
+const second=0;
 
 const newGame = () => {
   setCurrent({
@@ -47,8 +59,7 @@ const newGame = () => {
     play:{
       win:false,
       winner:null
-    },
-    initGame:true
+    }
   })
 }
 
@@ -60,20 +71,24 @@ return (
     <StyledMain style={{display:"flex"}}>
         <One>
             <Player 
-                picturePath={current.players[0].picture} 
-                logoPath={current.players[0].logo} 
-                winGames={current.players[0].wins}
+                picturePath={current.players[first].picture} 
+                logoPath={current.players[first].logo} 
+                moviePath={current.players[first].movie}
+                movieSpeed={current.players[first].speed}
+                winGames={current.players[first].wins}
                 winGame={(current.play.win && (current.play.winner===0))?true:false}
             ></Player> 
         </One>
         <Grid>  
-          <GameGrid handleStateWins={updateWins} handleNewGame={newGame} newGame={current.initGame}></GameGrid>
+          <GameGrid handleStateWins={updateWins} handleNewGame={newGame} firstToPlay={COMPUTER}></GameGrid>
         </Grid>
         <Two>
             <Player
-                picturePath={current.players[1].picture} 
-                logoPath={current.players[1].logo} 
-                winGames={current.players[1].wins}
+                picturePath={current.players[second].picture} 
+                logoPath={current.players[second].logo} 
+                moviePath={current.players[second].movie}
+                movieSpeed={current.players[second].speed}
+                winGames={current.players[second].wins}
                 winGame={(current.play.win && (current.play.winner===1))?true:false}
             ></Player>  
         </Two>

@@ -7,11 +7,11 @@ import findTheBestOption from '../utilities/findTheBestOption.js';
 import winPatternIs from '../utilities/winpattern.js';
 import mapSeqToPlayer from '../utilities/mapSeqToPlayer.js';
 import Rules from "./Rules.js";
-import ReactPlayer from "react-player";
+import OptionSetter from './OptionSetter.js';
 
 //Organisation de la grille de jeu
 
-const GameGrid = ({handleStateWins, handleNewGame, newGame}) => {
+const GameGrid = ({handleStateWins, handleNewGame, firstToPlay}) => {
 const [selected, setSelected] = useState(0);
 
 // initialisation du State
@@ -42,34 +42,42 @@ const next = (id) => {
 }
 
 useEffect(()=>{  
-  // temporisation ajoutée pour humaniser le temps de réaction de l'ordinateur
-if (currentCase.turn%2===0) {
+  // temporisation ajoutée pour humaniser le temps de réaction de l'ordinateur  
+if ((currentCase.turn+firstToPlay)%2===0) {
   const tempo = setTimeout(()=>findTheBestOption(currentCase.sequence,currentCase.turn).then(value=>next(value)),500);  
   return ()=>clearTimeout(tempo);
 }
+});
 
-if (winPatternIs(mapSeqToPlayer(currentCase.sequence),"AAA")>0) {
-  handleStateWins(0);
-
-
+useEffect(()=>{  
+  let isWon = false;
+  if (winPatternIs(mapSeqToPlayer(currentCase.sequence),"AAA")>0) {
+    handleStateWins(0);
+    isWon = true;
+  }
+  
+  if (winPatternIs(mapSeqToPlayer(currentCase.sequence),"BBB")>0) {
+    handleStateWins(1);
+    isWon = true;
+  }
+  if (isWon && !currentCase.winFlag) {
+    setCurrentCase({
+    displays:[...currentCase.displays], 
+    sequence :[...currentCase.sequence], 
+    turn:currentCase.turn,
+    winFlag:true
+    }); 
 }
-if (winPatternIs(mapSeqToPlayer(currentCase.sequence),"BBB")>0) {
-  handleStateWins(1);
+},[currentCase.sequence,handleStateWins]);
 
-}
-
-},[currentCase.sequence,currentCase.turn]
-);
-
-const initGame = ()=>{
+const initGame = ()=>{ 
   handleNewGame();
-
-  return setCurrentCase({
+   setCurrentCase({
     displays:[...initialDisplays], 
     sequence :[...initialSequence], 
     turn:0,
     winFlag:false
-  });
+  });  
 }
 
 const Grid = ()=>{
@@ -78,7 +86,7 @@ const Grid = ()=>{
     <Case
           key={index} 
           idVal={index} 
-          availability={currentCase.displays[index].availability} 
+          availability={currentCase.winFlag?false:currentCase.displays[index].availability} 
           imgFile={currentCase.displays[index].image}  
           handleClick={(evt)=>next(evt.target.id)}         
     ></Case>)
@@ -90,20 +98,18 @@ const Selected = ()=>{
     case 0:
       return <Rules></Rules>;
     case 1:    
-      return <Options></Options>
+      return <OptionSetter/>;
     case 2:
-      return <Rules></Rules>
+      return <Rules></Rules>;
     default:
-      // code block
   } 
 };
 
+
   return (
-    <Container>    
+    <Container>
       <Appli className="App"> 
-    {selected===0?<Grid/>:<Selected/> 
-    }
-                  
+          {selected===0?<Grid/>:<Selected/>}               
       </Appli>   
       <ControlPanel>
                   <Button 
@@ -126,17 +132,6 @@ const Selected = ()=>{
     </Container>   
   );
 }
-
-// {current.play.win?
-//   <ReactPlayer
-//     url={"hulk.mp4"}
-//     playing={true}
-//     muted={true}           
-//     width={600}
-//     height={"auto"}
-//     playbackRate={0.7}
-//   /> 
-
 
 const Container = styled('div')`
   display:flex;

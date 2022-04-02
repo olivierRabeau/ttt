@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components/macro"
 import { keyframes } from 'styled-components';
+import ReactPlayer from "react-player";
 
-const Player = ({picturePath,logoPath,winGames,winGame}) => {
+const Player = ({picturePath,logoPath,moviePath,movieSpeed,winGames,winGame}) => {
 const [current,setCurrent] =useState({
   pointsOnFive:0
 })
 
 useEffect(()=>{
-  setCurrent({pointsOnFive:winGames})
+  console.log(winGames);
+  if (winGame) setCurrent({pointsOnFive:winGames})
 },[winGames]);
 
   return (
@@ -26,7 +28,20 @@ useEffect(()=>{
         </StyledHeader>
 
         <StyledContent>
-        <Picture src={picturePath} id ="Tom"></Picture>
+          <BigContent>
+              {winGame?
+                <ReactPlayer
+                  url={moviePath}
+                  playing={true}
+                  muted={true}
+                  width={"30rem"}
+                  playbackRate={movieSpeed}                  
+                />:<Picture src={picturePath} id ="Tom"></Picture> 
+              }
+          </BigContent>
+          <SmallContent>
+              <Picture src={picturePath} id ="Tom"></Picture>
+          </SmallContent>          
         </StyledContent>
         <StyledFooter>
           <Message style={{visibility:winGame?"visible":"hidden", color:"yellow"}}>"Win the game"</Message>
@@ -35,6 +50,18 @@ useEffect(()=>{
   )
 }
 
+const SmallContent =styled('div')`
+display:none;
+@media screen and (max-width:1220px) {
+  display:block;
+}
+`
+const BigContent =styled('div')`
+display:block;
+@media screen and (max-width:1220px) {
+  display:none;
+}
+`
 const Card = styled('div')`
 border-radius:1rem;
 display:flex;
@@ -47,7 +74,6 @@ justify-content:center;
   margin:0.5rem;
 }
 `
-
 const StyledHeader=styled('div')`
 display:flex;
 flex-direction:column;
@@ -62,7 +88,9 @@ const StyledContent = styled('div')`
 display:flex;
 flex-direction:row;
 justify-content:center;
+width:40rem;
 @media screen and (max-width:1220px) {
+  width:auto;
   order:1;
 }
 `
@@ -72,11 +100,10 @@ padding:1rem;
   display:none;
 }
 `
-
 const Picture=styled('img') `
-height:20rem;
+width:35rem;
 @media screen and (max-width:1220px) {
-  height:5rem;
+  width:8rem;
 }
 `
 const WinPoint=styled('img')`

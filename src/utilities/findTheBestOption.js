@@ -5,7 +5,15 @@ import winPatternIs from "./winpattern"
 async function findTheBestOption (currentSequence, currentTurn){
 
     // Ordinateur player
+    // winGame est le flag principal; Priorité haute -> victoire assurée.
+
+    // winOption est le flag secondaire.Priorité moyenne -> victoire possible.
+
+    // Si wingame puis winOption sont à false, 
+    // Le bot cherche à géner le jeu de l'adversaire -> Possibilité de match nul recherché
+
     let winGame=false;
+    let winOption=false;
     let bestPositionToPlay=undefined;
     let biggestScore = 0;
     let score=0;
@@ -67,9 +75,8 @@ async function findTheBestOption (currentSequence, currentTurn){
                   break;
                 } else if (cptr===1){
                   bestPositionToPlay=sequence[i];
-                  winGame = true;
+                  winOption = true;
                   if (displayMessage) console.log("L'ordinateur peut se créer pour le prochain tour une option de victoire en ",bestPositionToPlay);
-                  break;
                 }
               }
             }    
@@ -94,9 +101,8 @@ async function findTheBestOption (currentSequence, currentTurn){
           break;
         } else if (cptr===1){
           bestPositionToPlay=sequence[i];
-          winGame = true;
+          winOption = true;
           if (displayMessage) console.log("Le joueur se crée pour le prochain tour une option de victoire en ",bestPositionToPlay);
-          break;
         }
       }
     }   
@@ -129,7 +135,7 @@ async function findTheBestOption (currentSequence, currentTurn){
           break;
         }
         // position qui handicape le plus le joueur
-        if (score>=biggestScore) {
+        if (!winOption && score>=biggestScore) {
           bestPositionToPlay = sequence[i];
           biggestScore=score;
           if (displayMessage) console.log("handicap adversaire ",bestPositionToPlay);
