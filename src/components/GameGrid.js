@@ -6,8 +6,8 @@ import nextPlayer from '../utilities/nextPlayer.js';
 import findTheBestOption from '../utilities/findTheBestOption.js';
 import winPatternIs from '../utilities/winpattern.js';
 import mapSeqToPlayer from '../utilities/mapSeqToPlayer.js';
-import Rules from "./Rules.js"
-
+import Rules from "./Rules.js";
+import ReactPlayer from "react-player";
 
 //Organisation de la grille de jeu
 
@@ -26,7 +26,8 @@ for (let i = 0; i< 9; i++){
 const [currentCase, setCurrentCase] = useState({
   displays:[...initialDisplays], 
   sequence :[...initialSequence], 
-  turn:0
+  turn:0, 
+  winFlag:false
 });
 
 // Mise à jour du State suite à la sélection d'une case par un joueur
@@ -35,7 +36,8 @@ const next = (id) => {
   setCurrentCase({
     displays:[...upToDateState.displays],
     sequence:[...upToDateState.sequence],
-    turn:upToDateState.turn
+    turn:upToDateState.turn,
+    winFlag:upToDateState.winFlag
   });
 }
 
@@ -46,18 +48,27 @@ if (currentCase.turn%2===0) {
   return ()=>clearTimeout(tempo);
 }
 
-if (winPatternIs(mapSeqToPlayer(currentCase.sequence),"AAA")>0) handleStateWins(0);
-if (winPatternIs(mapSeqToPlayer(currentCase.sequence),"BBB")>0) handleStateWins(1);
+if (winPatternIs(mapSeqToPlayer(currentCase.sequence),"AAA")>0) {
+  handleStateWins(0);
+
+
+}
+if (winPatternIs(mapSeqToPlayer(currentCase.sequence),"BBB")>0) {
+  handleStateWins(1);
+
+}
 
 },[currentCase.sequence,currentCase.turn]
 );
 
 const initGame = ()=>{
   handleNewGame();
+
   return setCurrentCase({
     displays:[...initialDisplays], 
     sequence :[...initialSequence], 
-    turn:0
+    turn:0,
+    winFlag:false
   });
 }
 
@@ -90,7 +101,9 @@ const Selected = ()=>{
   return (
     <Container>    
       <Appli className="App"> 
-                  {(selected===0)?<Grid/>:<Selected/>}  
+    {selected===0?<Grid/>:<Selected/> 
+    }
+                  
       </Appli>   
       <ControlPanel>
                   <Button 
@@ -113,6 +126,17 @@ const Selected = ()=>{
     </Container>   
   );
 }
+
+// {current.play.win?
+//   <ReactPlayer
+//     url={"hulk.mp4"}
+//     playing={true}
+//     muted={true}           
+//     width={600}
+//     height={"auto"}
+//     playbackRate={0.7}
+//   /> 
+
 
 const Container = styled('div')`
   display:flex;

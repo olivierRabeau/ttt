@@ -13,7 +13,6 @@ useEffect(()=>{
 
   return (
     <Card>
-     
         
         <StyledHeader >
             <MessageSmall style={{visibility:winGame?"visible":"hidden", color:"yellow"}}>"Win the game"</MessageSmall>
@@ -37,15 +36,15 @@ useEffect(()=>{
 }
 
 const Card = styled('div')`
-
 border-radius:1rem;
 display:flex;
 flex-direction:column;
 align-items:center;
+justify-content:center;
 @media screen and (max-width:1220px) {
   flex-direction:row;
   border-bottom:1px solid grey;
-  margin:1rem;
+  margin:0.5rem;
 }
 `
 
@@ -53,8 +52,10 @@ const StyledHeader=styled('div')`
 display:flex;
 flex-direction:column;
 justify-content:center;
+align-items:center;
+margin-bottom:1rem;
 @media screen and (max-width:1220px) {
-  order:2;
+  order:2;  
 }
 `
 const StyledContent = styled('div')`
@@ -66,11 +67,9 @@ justify-content:center;
 }
 `
 const StyledFooter = styled('div')`
-display:flex;
-flex-direction:row;
-justify-content:center;
+padding:1rem;
 @media screen and (max-width:1220px) {
-  order:0;
+  display:none;
 }
 `
 
@@ -107,6 +106,8 @@ display:none;
 const MessageSmall =styled(Message)`
 display:none;
 font-size:1rem;
+padding:0.5rem;
+width:100%;
 @media screen and (max-width:1220px) {
 display:inline;
 }
@@ -115,8 +116,6 @@ display:inline;
 const WinPointRow = styled('div')`
 dislay:flex;
 flex-direction:row;
-`
-const StyledButton = styled('button')`
 `
 
 export default Player

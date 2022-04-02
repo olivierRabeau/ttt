@@ -5,6 +5,9 @@ import Player from './components/Player';
 import Title from './components/Title'
 import {useState } from 'react';
 
+
+
+
 function App() {
 const [current,setCurrent]=useState({
 players:[
@@ -63,8 +66,8 @@ return (
                 winGame={(current.play.win && (current.play.winner===0))?true:false}
             ></Player> 
         </One>
-        <Grid>
-            <GameGrid handleStateWins={updateWins} handleNewGame={newGame} newGame={current.initGame}></GameGrid> 
+        <Grid>  
+          <GameGrid handleStateWins={updateWins} handleNewGame={newGame} newGame={current.initGame}></GameGrid>
         </Grid>
         <Two>
             <Player
@@ -86,13 +89,14 @@ return (
 
 const One = styled('div')`
 order:1; 
+text-align:start;
 @media screen and (max-width:1220px) {
   order:1;               
 }
 `
 const Two = styled('div')`
 order:3; 
-text-align:center;
+text-align:start;
 @media screen and (max-width:1220px) {
   order:2;               
 }
@@ -118,7 +122,7 @@ justify-content:center;
 align-items:center;
 margin:auto;
 width:80vw;
-height:10rem;
+height:6rem;
 @media screen and (max-width:1220px) {
   height:5rem;               
 }
@@ -132,7 +136,10 @@ margin:auto;
 
 const Container = styled('div')`
 display:grid;
-grid-template-rows :10rem auto 10rem;
+grid-template-rows :8rem auto 10rem;
+@media screen and (max-width:1220px) {
+  grid-template-rows :5rem auto 10rem;          
+}
 `
 const StyledMain = styled('div')`
 display:flex;
