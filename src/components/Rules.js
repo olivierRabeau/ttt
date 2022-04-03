@@ -16,7 +16,9 @@ const Rules = () => {
 
 export default Rules;
 
-const Title =styled('h1')`
+//--------------------------------CSS IN JS------------------------------
+
+const Title =styled('h2')`
   color:yellow;
 `
 

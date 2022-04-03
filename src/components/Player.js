@@ -9,9 +9,8 @@ const [current,setCurrent] =useState({
 })
 
 useEffect(()=>{
-  console.log(winGames);
   if (winGame) setCurrent({pointsOnFive:winGames})
-},[winGames]);
+},[winGames, winGame]);
 
   return (
     <Card>
@@ -49,6 +48,10 @@ useEffect(()=>{
     </Card>
   )
 }
+
+export default Player
+
+//--------------------------------CSS IN JS------------------------------
 
 const SmallContent =styled('div')`
 display:none;
@@ -102,8 +105,11 @@ padding:1rem;
 `
 const Picture=styled('img') `
 width:35rem;
+border-radius:2rem;
+margin:0.5rem;
 @media screen and (max-width:1220px) {
-  width:8rem;
+  width:7rem;
+  border-radius:10rem;
 }
 `
 const WinPoint=styled('img')`
@@ -139,10 +145,7 @@ width:100%;
 display:inline;
 }
 `
-
 const WinPointRow = styled('div')`
-dislay:flex;
+display:flex;
 flex-direction:row;
 `
-
-export default Player

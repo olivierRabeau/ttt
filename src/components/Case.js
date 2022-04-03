@@ -9,7 +9,7 @@ const [current, setCurrent] = useState(
   {
     id:null,
     available:true,
-    color:'black'
+    image:null
   }
 );
 
@@ -17,7 +17,7 @@ useEffect (()=>{
  setCurrent ({    
     id:idVal,
     available:availability,
-    image:imgFile
+    image:"./resources/cross.png"
   })
 },[idVal,availability,imgFile])
 
@@ -30,6 +30,10 @@ useEffect (()=>{
     </StyledImg>
   )
 }
+
+export default Case
+
+//--------------------------------CSS IN JS------------------------------
 
 const StyledImg = styled('img')`
 border : 1px solid grey;
@@ -50,6 +54,4 @@ border-radius:1rem;
     height:7rem;
     margin:0.2rem;
   }
-
 `
-export default Case

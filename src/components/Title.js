@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from "styled-components/macro";
 import { keyframes } from 'styled-components';
 
 const Title = () => {
-    const [current,setCurrent]=useState({
-        start:0
-      });
+
       
   return (
-    <StyledDiv start={current.start} end={current.start+10}>
+    <StyledDiv>
         TIC TAC TOE
     </StyledDiv >
   )
 }
 
 export default Title
+
+//--------------------------------CSS IN JS------------------------------
+
 const blade = keyframes`
  0% { background-position: 0 0; } 
  20% { background-position: 33rem 0; }  

@@ -1,6 +1,6 @@
 // Mise à jour du State de la grille de jeu
 
-const nextPlayer = (currentState, id) =>{
+const nextPlayer = (currentState, id, playerMark,computerMark) =>{
 const deepCpdState = JSON.parse(JSON.stringify(currentState));
 const displays = deepCpdState.displays;
 const sequence = deepCpdState.sequence;
@@ -16,7 +16,7 @@ sequence.splice(parseInt(turn),1,parseInt(id));
 displays.splice(parseInt(id),1, 
           {
             availability:false,
-            image:(turn%2===0)?"rond.png":"cross.png"
+            image:(turn%2===0)?playerMark:computerMark
           }
 );
 

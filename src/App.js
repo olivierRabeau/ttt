@@ -3,25 +3,34 @@ import GameGrid from './components/GameGrid.js'
 import styled from 'styled-components/macro'
 import Player from './components/Player';
 import Title from './components/Title'
-import {useState } from 'react';
+import {useState,createContext, useEffect } from 'react';
+import players from "../src/styles/themes";
 
-
-
+export const userPreferences = createContext();
 
 function App() {
+  const [userSettings, setUserSettings] = useState({
+    start:0,
+    cptrSkills:2,
+    theming:"avengers",
+    avatar:0,
+    computer:1
+  });
+const value = {userSettings, setUserSettings};
+
 const [current,setCurrent]=useState({
 players:[
   {
-    picture:"./Jerry.png",
-    logo:"rond.png",
-    movie:"hulk.mp4",
+    picture:players(userSettings.theming)[userSettings.avatar].picture,
+    logo:players(userSettings.theming)[userSettings.avatar].mark,
+    movie:players(userSettings.theming)[userSettings.avatar].movie,
     speed:0.7,
     wins:0
   },
   {
-    picture:"./Tom.png",
-    logo:"cross.png",
-    movie:"spidy.mp4",
+    picture:players(userSettings.theming)[userSettings.computer].picture,
+    logo:players(userSettings.theming)[userSettings.computer].mark,
+    movie:players(userSettings.theming)[userSettings.computer].movie,
     speed:0.5,
     wins:0
   }
@@ -48,10 +57,9 @@ const updateWins = (player) => {
 }
 
 
-const PLAYER=1;
-const COMPUTER=0;
-const first=1;
-const second=0;
+
+const first=0;
+const second=1;
 
 const newGame = () => {
   setCurrent({
@@ -65,39 +73,44 @@ const newGame = () => {
 
 return (
     <Container> 
-    <StyledHeader>
-            <Title></Title>          
-    </StyledHeader> 
-    <StyledMain style={{display:"flex"}}>
-        <One>
-            <Player 
-                picturePath={current.players[first].picture} 
-                logoPath={current.players[first].logo} 
-                moviePath={current.players[first].movie}
-                movieSpeed={current.players[first].speed}
-                winGames={current.players[first].wins}
-                winGame={(current.play.win && (current.play.winner===0))?true:false}
-            ></Player> 
-        </One>
-        <Grid>  
-          <GameGrid handleStateWins={updateWins} handleNewGame={newGame} firstToPlay={COMPUTER}></GameGrid>
-        </Grid>
-        <Two>
-            <Player
-                picturePath={current.players[second].picture} 
-                logoPath={current.players[second].logo} 
-                moviePath={current.players[second].movie}
-                movieSpeed={current.players[second].speed}
-                winGames={current.players[second].wins}
-                winGame={(current.play.win && (current.play.winner===1))?true:false}
-            ></Player>  
-        </Two>
-      </StyledMain>  
-<StyledFooter>
+      <userPreferences.Provider value={value}>
+        <StyledHeader>
+                <Title></Title>          
+        </StyledHeader> 
+        <StyledMain style={{display:"flex"}}>
+            <One>
+                <Player 
+                    picturePath={players(userSettings.theming)[userSettings.avatar].picture} 
+                    logoPath={players(userSettings.theming)[userSettings.avatar].mark} 
+                    moviePath={players(userSettings.theming)[userSettings.avatar].movie}
+                    movieSpeed={current.players[first].speed}
+                    winGames={current.players[first].wins}
+                    winGame={(current.play.win && (current.play.winner===0))?true:false}
+                ></Player> 
+            </One>
+            <Grid>  
+              
+              <GameGrid handleStateWins={updateWins} handleNewGame={newGame} firstToPlay={1}></GameGrid>
+            
+            </Grid>
+            <Two>
+                <Player
+                    picturePath={players(userSettings.theming)[userSettings.computer].picture} 
+                    logoPath={players(userSettings.theming)[userSettings.computer].mark} 
+                    moviePath={players(userSettings.theming)[userSettings.computer].movie}
+                    movieSpeed={current.players[second].speed}
+                    winGames={current.players[second].wins}
+                    winGame={(current.play.win && (current.play.winner===1))?true:false}
+                ></Player>  
+            </Two>
+          </StyledMain>  
+    <StyledFooter>
 
-</StyledFooter>
+    </StyledFooter>
+    </userPreferences.Provider>
 
-  
+ 
+ 
 </Container>
   );
 }
@@ -122,13 +135,7 @@ order:2;
   order:3;                
 }
 `
-const Form = styled('div')`
-width:20rem;
-height:40rem;
-background-color:blue;
-border-top-right-radius:1rem;
-border-bottom-right-radius:1rem;
-`
+
 const StyledHeader = styled.div`
 border-bottom:1px solid #333333;
 display:flex;

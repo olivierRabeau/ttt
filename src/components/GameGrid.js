@@ -1,18 +1,21 @@
 import React, { useEffect } from 'react';
 import Case from './Case.js';
 import styled from 'styled-components/macro';
-import { useState } from 'react';
+import { useState,useContext } from 'react';
 import nextPlayer from '../utilities/nextPlayer.js';
 import findTheBestOption from '../utilities/findTheBestOption.js';
 import winPatternIs from '../utilities/winpattern.js';
 import mapSeqToPlayer from '../utilities/mapSeqToPlayer.js';
 import Rules from "./Rules.js";
 import OptionSetter from './OptionSetter.js';
+import players from "../styles/themes.js"
+import { userPreferences } from '../App.js';
 
 //Organisation de la grille de jeu
 
 const GameGrid = ({handleStateWins, handleNewGame, firstToPlay}) => {
 const [selected, setSelected] = useState(0);
+const {userSettings}=useContext(userPreferences);
 
 // initialisation du State
 let initialDisplays=[];
@@ -32,7 +35,12 @@ const [currentCase, setCurrentCase] = useState({
 
 // Mise à jour du State suite à la sélection d'une case par un joueur
 const next = (id) => {
-  const upToDateState = nextPlayer(currentCase,id);
+  const upToDateState = nextPlayer(
+    currentCase,
+    id,
+    players(userSettings.theming)[userSettings.start===0?userSettings.avatar:userSettings.computer].mark,
+    players(userSettings.theming)[userSettings.start===1?userSettings.avatar:userSettings.computer].mark
+    );
   setCurrentCase({
     displays:[...upToDateState.displays],
     sequence:[...upToDateState.sequence],
@@ -43,7 +51,7 @@ const next = (id) => {
 
 useEffect(()=>{  
   // temporisation ajoutée pour humaniser le temps de réaction de l'ordinateur  
-if ((currentCase.turn+firstToPlay)%2===0) {
+if (parseInt(currentCase.turn)%2===(userSettings.start===1?0:1)) {
   const tempo = setTimeout(()=>findTheBestOption(currentCase.sequence,currentCase.turn).then(value=>next(value)),500);  
   return ()=>clearTimeout(tempo);
 }
@@ -68,7 +76,7 @@ useEffect(()=>{
     winFlag:true
     }); 
 }
-},[currentCase.sequence,handleStateWins]);
+},[handleStateWins,currentCase.displays,currentCase.sequence,currentCase.turn,currentCase.winFlag]);
 
 const initGame = ()=>{ 
   handleNewGame();
@@ -126,12 +134,16 @@ const Selected = ()=>{
                   type="button" 
                   onClick={()=>selected===0?setSelected(1):setSelected(0)}
                   style={{color:selected===0?null:"white", boxShadow:selected===0?null:"0 0 10px white"}}
-                  >{selected===0?"Options":"Done"}</Button> 
+                  >{selected===0?"Settings":"Done"}</Button> 
 
       </ControlPanel>
     </Container>   
   );
 }
+
+export default GameGrid;
+
+//--------------------------------CSS IN JS------------------------------
 
 const Container = styled('div')`
   display:flex;
@@ -147,19 +159,6 @@ width:100%;
 display:flex;
 flex-direction:row;
 justify-content:space-around;
-`
-
-const Options = styled('form')`
-position:absolute;
-top:0;
-width:30rem;
-height:30rem;
-border-radius:1rem;
-background:black;
-@media screen and (max-width:1220px) {
-  width:22.4rem;
-  height:22.4rem; 
-}
 `
 
 const Appli = styled('div')`
@@ -197,5 +196,3 @@ border-radius:0.5rem;
   visibility: hidden; 
 }
 `
-
-export default GameGrid;

@@ -22,7 +22,7 @@ async function findTheBestOption (currentSequence, currentTurn){
     let sequence = availableCases(currentSequence)
 
     // affecter true à cette variable permet de visualiser la séquence de résolution de l'ordinateur
-    let displayMessage = false;
+    let displayMessage = true;
 
 
     if (displayMessage) console.log("findTheBestOption : ", currentSequence);
@@ -39,7 +39,7 @@ async function findTheBestOption (currentSequence, currentTurn){
         break;
       }
     }
-    
+    console.log(winGame);
     // Le joueur a-t-il une possibilité de victoire au prochain coup ?  
     if (!winGame) {
       for (let i =0;i<sequence.length;i++){    
@@ -54,7 +54,7 @@ async function findTheBestOption (currentSequence, currentTurn){
           } 
         }
     }
-
+    console.log(winGame);
             // L'ordinateur peut-il créer une double ou une simple option de victoire en un coup?
             if (!winGame) {
               let nextOpponentTurnSequence=undefined;
@@ -70,7 +70,8 @@ async function findTheBestOption (currentSequence, currentTurn){
                 }
                 if (cptr>1) {
                   bestPositionToPlay=sequence[i];
-                  winGame = true;
+                  // winGame = true;
+                  winOption = true;
                   console.log("L'ordinateur peut créer une double option de victoire en ",bestPositionToPlay);
                   break;
                 } else if (cptr===1){
@@ -80,8 +81,9 @@ async function findTheBestOption (currentSequence, currentTurn){
                 }
               }
             }    
-
+console.log(winGame);
     // Le joueur peut-il créer une double ou une simple option de victoire en un coup?
+    // WinOption : mode défensif
     if (!winGame) {
       let nextOpponentTurnSequence=undefined;
       for (let i =0;i<sequence.length;i++){    
@@ -96,7 +98,8 @@ async function findTheBestOption (currentSequence, currentTurn){
         }
         if (cptr>1) {
           bestPositionToPlay=sequence[i];
-          winGame = true;
+          // winGame = true;
+          winOption = true;
           if (displayMessage) console.log("Le joueur a une double option de victoire en ",bestPositionToPlay);
           break;
         } else if (cptr===1){
@@ -106,7 +109,7 @@ async function findTheBestOption (currentSequence, currentTurn){
         }
       }
     }   
-
+    console.log(winGame);
     if (!winGame) {
       // Comment réduire le nombre de possibilités d'alignement du joueur  
       for (let i =0;i<sequence.length;i++){  
@@ -121,7 +124,7 @@ async function findTheBestOption (currentSequence, currentTurn){
           break;
         } 
         // au second tour priorité aux coins de la grille de jeu
-        if (currentTurn>0 && currentTurn<=2){
+        if (currentTurn>0 ){
           switch (sequence[i]) {
             case 0:
             case 2:
@@ -132,7 +135,7 @@ async function findTheBestOption (currentSequence, currentTurn){
               break;  
             default:    
           }
-          break;
+          
         }
         // position qui handicape le plus le joueur
         if (!winOption && score>=biggestScore) {
