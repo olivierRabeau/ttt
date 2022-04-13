@@ -1,8 +1,11 @@
 import availableCases from "./availableCases";
 import mapSeqToPlayer from "./mapSeqToPlayer";
-import winPatternIs from "./winpattern"
+import winPatternScore from "./winPatternScore"
+import winIsEnsured from "./winIsEnsured";
+import doubleWinPattern from "./doubleWinPattern";
 
-async function findTheBestOption (currentSequence, currentTurn){
+
+const findTheBestOption = (currentSequence, currentTurn, computerSkills) =>{
 
     // Ordinateur player
     // winGame est le flag principal; Priorité haute -> victoire assurée.
@@ -11,7 +14,6 @@ async function findTheBestOption (currentSequence, currentTurn){
 
     // Si wingame puis winOption sont à false, 
     // Le bot cherche à géner le jeu de l'adversaire -> Possibilité de match nul recherché
-
     let winGame=false;
     let winOption=false;
     let bestPositionToPlay=undefined;
@@ -20,134 +22,119 @@ async function findTheBestOption (currentSequence, currentTurn){
     let hypotheticSequence=undefined;
     let gridPicture=undefined;
     let sequence = availableCases(currentSequence)
-
-    // affecter true à cette variable permet de visualiser la séquence de résolution de l'ordinateur
-    let displayMessage = true;
-
-
-    if (displayMessage) console.log("findTheBestOption : ", currentSequence);
-
-    // L'ordinateur a-t-il une possibilité de victoire actuellement ?
-    for (let i =0;i<sequence.length;i++){
-      hypotheticSequence = JSON.parse(JSON.stringify(currentSequence)); 
-      hypotheticSequence[currentTurn]= sequence[i];
-      gridPicture = await mapSeqToPlayer (hypotheticSequence);
-      if (winPatternIs (gridPicture,((currentTurn)%2===0)?"AAA":"BBB")>0)  {
-        bestPositionToPlay=sequence[i];
-        winGame = true;
-        if (displayMessage) console.log("L'ordinateur gagne en ",bestPositionToPlay);
-        break;
-      }
+    let nextTurn = parseInt(currentTurn)+1;
+    let allowed =[true,true,true,true,true,true,true]
+    let skills ={
+      cptrWinCR:0,
+      plrWinNR:1,
+      cptrDblWP:2,
+      plrDblWP:3,
+      center:4,
+      corners:5,
+      preventOpp:6
     }
-    console.log(winGame);
-    // Le joueur a-t-il une possibilité de victoire au prochain coup ?  
-    if (!winGame) {
-      for (let i =0;i<sequence.length;i++){    
-        hypotheticSequence = JSON.parse(JSON.stringify(currentSequence)); 
-        hypotheticSequence[currentTurn+1]= sequence[i];
-        gridPicture = await mapSeqToPlayer (hypotheticSequence);
-          if (winPatternIs (gridPicture,((currentTurn+1)%2===0)?"AAA":"BBB")>0) {
-            bestPositionToPlay=sequence[i];
-            winGame = true;
-            if (displayMessage) console.log("Le joueur gagne en ",bestPositionToPlay);
-            break;
-          } 
-        }
-    }
-    console.log(winGame);
-            // L'ordinateur peut-il créer une double ou une simple option de victoire en un coup?
-            if (!winGame) {
-              let nextOpponentTurnSequence=undefined;
-              for (let i =0;i<sequence.length;i++){    
-                hypotheticSequence = JSON.parse(JSON.stringify(currentSequence)); 
-                hypotheticSequence[currentTurn]= sequence[i];
-                nextOpponentTurnSequence = availableCases(hypotheticSequence);
-                let cptr=0;
-                for (let j =0;j<nextOpponentTurnSequence.length;j++){               
-                      hypotheticSequence[currentTurn+2]= nextOpponentTurnSequence[j];
-                      gridPicture = await mapSeqToPlayer (hypotheticSequence);             
-                      if (winPatternIs (gridPicture,((currentTurn)%2===0)?"AAA":"BBB")) cptr++;
-                }
-                if (cptr>1) {
-                  bestPositionToPlay=sequence[i];
-                  // winGame = true;
-                  winOption = true;
-                  console.log("L'ordinateur peut créer une double option de victoire en ",bestPositionToPlay);
-                  break;
-                } else if (cptr===1){
-                  bestPositionToPlay=sequence[i];
-                  winOption = true;
-                  if (displayMessage) console.log("L'ordinateur peut se créer pour le prochain tour une option de victoire en ",bestPositionToPlay);
-                }
-              }
-            }    
-console.log(winGame);
-    // Le joueur peut-il créer une double ou une simple option de victoire en un coup?
-    // WinOption : mode défensif
-    if (!winGame) {
-      let nextOpponentTurnSequence=undefined;
-      for (let i =0;i<sequence.length;i++){    
-        hypotheticSequence = JSON.parse(JSON.stringify(currentSequence)); 
-        hypotheticSequence[currentTurn+1]= sequence[i];
-        nextOpponentTurnSequence = availableCases(hypotheticSequence);
-        let cptr=0;
-        for (let j =0;j<nextOpponentTurnSequence.length;j++){               
-              hypotheticSequence[currentTurn+3]= nextOpponentTurnSequence[j];
-              gridPicture = await mapSeqToPlayer (hypotheticSequence);             
-              if (winPatternIs (gridPicture,((currentTurn+1)%2===0)?"AAA":"BBB")) cptr++;
-        }
-        if (cptr>1) {
-          bestPositionToPlay=sequence[i];
-          // winGame = true;
-          winOption = true;
-          if (displayMessage) console.log("Le joueur a une double option de victoire en ",bestPositionToPlay);
-          break;
-        } else if (cptr===1){
-          bestPositionToPlay=sequence[i];
-          winOption = true;
-          if (displayMessage) console.log("Le joueur se crée pour le prochain tour une option de victoire en ",bestPositionToPlay);
-        }
-      }
-    }   
-    console.log(winGame);
-    if (!winGame) {
-      // Comment réduire le nombre de possibilités d'alignement du joueur  
-      for (let i =0;i<sequence.length;i++){  
-        hypotheticSequence = JSON.parse(JSON.stringify(currentSequence)); 
-        hypotheticSequence[currentTurn]= sequence[i];
-        gridPicture = await mapSeqToPlayer (hypotheticSequence,((currentTurn+1)%2===0)?"A":"B");
-        score = await winPatternIs(gridPicture,((currentTurn)%2===0)?"BBB":"AAA");
-        // si la case centrale n'est pas prise c'est la meilleure option
-        if (sequence[i]===4){
-          bestPositionToPlay = sequence[i];
-          if (displayMessage) console.log("La case centrale est la meilleure option");
-          break;
-        } 
-        // au second tour priorité aux coins de la grille de jeu
-        if (currentTurn>0 ){
-          switch (sequence[i]) {
-            case 0:
-            case 2:
-            case 6:
-            case 8:
-              bestPositionToPlay = sequence[i];
-              if (displayMessage) console.log("Les coins constituent une option nécessaire jusqu'au troisième tour");
-              break;  
-            default:    
-          }
-          
-        }
-        // position qui handicape le plus le joueur
-        if (!winOption && score>=biggestScore) {
-          bestPositionToPlay = sequence[i];
-          biggestScore=score;
-          if (displayMessage) console.log("handicap adversaire ",bestPositionToPlay);
-        }
-      }
-        
     
+    switch (computerSkills) {
+        case 1:
+            allowed[skills.cptrDblWP]=false;
+            allowed[skills.plrDblWP]=false;
+            allowed[skills.plrWinNR]=Math.floor(Math.random()*5)>0?true:false;
+            // two-thirds
+            allowed[skills.center]=Math.floor(Math.random()*3)<2?true:false;
+            allowed[skills.corners]=Math.floor(Math.random()*3)<2?true:false;
+            allowed[skills.preventOpp]=Math.floor(Math.random()*3)<2?true:false;
+            break;
+              case 2:
+                allowed[skills.plrWinNR]=Math.floor(Math.random()*5)<1?true:false;
+                allowed[skills.cptrDblWP]=false;
+                allowed[skills.plrDblWP]=false;
+                // one-fifth
+                allowed[skills.center]=Math.floor(Math.random()*5)<1?true:false;
+                allowed[skills.corners]=Math.floor(Math.random()*5)<1?true:false;
+                allowed[skills.preventOpp]=Math.floor(Math.random()*5)<1?true:false;
+                break;
+            default:
+               // all allowed
+    }
+ 
+
+    let displayMessage = false;
+
+    let computerWinCurrentRound =winIsEnsured (currentSequence,currentTurn);   
+    if (allowed[skills.cptrWinCR] && computerWinCurrentRound!==undefined) {
+      bestPositionToPlay = computerWinCurrentRound;
+      winGame=true;
+      if (displayMessage) console.log("computer wins in ",bestPositionToPlay);
+    }
+    
+    let playerWinNextRound =winIsEnsured (currentSequence,nextTurn);   
+    if (allowed[skills.plrWinNR] && playerWinNextRound!==undefined && !winGame) {
+      bestPositionToPlay = playerWinNextRound;
+      winGame=true;
+      if (displayMessage) console.log("player wins in ",bestPositionToPlay);
+    }
+
+    let computerDoubleWinPattern = doubleWinPattern (currentSequence,currentTurn);   
+    if (allowed[skills.cptrDblWP] && computerDoubleWinPattern!==undefined && !winGame) {
+      bestPositionToPlay = computerDoubleWinPattern;
+      winGame=true;
+      if (displayMessage) console.log("computer double win pattern in ",bestPositionToPlay);
+    }
+
+    let playerDoubleWinPattern = doubleWinPattern (currentSequence,nextTurn);   
+    if (allowed[skills.plrDblWP] && playerDoubleWinPattern!==undefined && !winGame) {
+        bestPositionToPlay = playerDoubleWinPattern;
+        winGame=true;
+        if (displayMessage) console.log("player double win pattern in ",bestPositionToPlay);
+    }           
+    
+    if (!winGame){
+                  // Comment réduire le nombre de possibilités d'alignement du joueur  
+                  for (let i =0;i<sequence.length;i++){  
+                    hypotheticSequence = [...currentSequence]; 
+                    hypotheticSequence[currentTurn]= sequence[i];
+                    
+                    gridPicture =  mapSeqToPlayer (hypotheticSequence, ((currentTurn+1)%2===0)?"A":"B");
+                    score =  winPatternScore(gridPicture,((currentTurn)%2===0)?"BBB":"AAA");
+                    // si la case centrale n'est pas prise c'est la meilleure option
+                    if (allowed[skills.center] && sequence[i]===4){
+                      bestPositionToPlay = sequence[i];
+                      winOption=true;
+                      if (displayMessage) console.log("La case centrale est la meilleure option");
+                      break;
+                    } 
+                    // au second tour priorité aux coins de la grille de jeu
+                    if (allowed[skills.corners] && currentTurn>0 && !winOption ){
+                      switch (sequence[i]) {
+                        case 0:
+                        case 2:
+                        case 6:
+                        case 8:
+                          bestPositionToPlay = sequence[i];
+                          winOption=true;
+                          if (displayMessage) console.log("Les coins constituent une option nécessaire jusqu'au troisième tour");
+                          break;  
+                        default:    
+                      }          
+                    }
+                    // position qui handicape le plus le joueur
+                    if (allowed[skills.preventOpp] && !winOption && score>=biggestScore) {
+                      bestPositionToPlay = sequence[i];
+                      biggestScore=score;
+                      if (displayMessage) console.log("handicap adversaire ",bestPositionToPlay);
+                    }
+                  }    
+    }
+    if (bestPositionToPlay===undefined) {
+      bestPositionToPlay = sequence[Math.floor(Math.random()*sequence.length)];
+      if (displayMessage) console.log("random ",bestPositionToPlay);
     }
     return bestPositionToPlay;
 }
 
     export default findTheBestOption;
+
+
+
+
+    

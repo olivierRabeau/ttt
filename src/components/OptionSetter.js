@@ -1,6 +1,7 @@
 import React,{useState,useContext, useEffect} from 'react';
 import players,{theme} from "../styles/themes";
 import styled from "styled-components/macro";
+import devices from '../styles/mediaQueries';
 import { userPreferences } from '../App';
 
 
@@ -35,7 +36,7 @@ useEffect(()=>{
       <Parameters>
       
       <WhoPlayFirst>
-        <h3>Who starts ?</h3>
+        <h3>First</h3>
         <select name="first" onChange={handleFirst}>
         {firstPlayer.map((value,idx)=><option value={idx} key={idx} id={idx} selected={idx===userSettings.start?true:false}>{value}</option>)} 
         </select>
@@ -43,13 +44,13 @@ useEffect(()=>{
       
       <ComputerBehaviour>
       <h3>Computer </h3>
-        <select name="cptrSkills" onChange={handleCptrSkills}>
+        <select name="cptrSkills" defaultvalue={1} onChange={handleCptrSkills}>
           {computerSkills.map((value,idx)=><option value={idx} key={idx} id={idx} selected={idx===userSettings.cptrSkills?true:false}>{value}</option>)}     
         </select>   
       </ComputerBehaviour>
       
       <Theme>    
-        <h3>Theming</h3>
+        <h3>Theme</h3>
         <select name="thm" onChange={handleThm}>
           {themes.map((value,idx)=><option value={value} key={idx} id={idx} selected={value===userSettings.theming?true:false}>{value}</option>)}        
         </select> 
@@ -84,27 +85,34 @@ export default OptionSetter
 const Picture=styled('img') `
   border:none;
   margin:0;
-  width:8rem;
+  width:7rem;
   border-radius:10rem;
   :hover{
     box-shadow:0 0 10px grey;
   }
-
+  ${devices.tablet} {
+    width:8rem;
+  }
 `
 
 const Parameters=styled('div')`
-width:30rem;
+
 display:grid;
 grid-template-rows:repeat(3,1fr) auto;
 justify-items:center;
 justify-content:center;
 align-items:center;
 grid-auto-flow:column;
+margin:auto;
 display:block;
-@media screen and (max-width:1220px) {
-  width:22.5rem;
+width:16.8rem;
+padding:1rem;
+${devices.tablet} {
+  width:22rem;
 }
-
+${devices.desktop} {  
+  width:30rem;
+}
 `
 
 const Row=styled('div')`
@@ -112,15 +120,15 @@ display:flex;
 flex-direction:row;
 justify-content:space-between;
 align-items:center;
+height:4rem;
 gap:1rem;
+
 font-size:1.2rem;
 select{
   font-size:1.2rem;
   border-radius:0.5rem;
-  width:20rem;
-  @media screen and (max-width:1220px) {
-    width:10rem;
-  }
+  width:50%;
+
 }
 h3{
 color:yellow;
@@ -130,7 +138,7 @@ const Theme =styled(Row)``
 const ComputerBehaviour =styled(Row)``
 const WhoPlayFirst =styled(Row)``
 const Avatars=styled(Row)`
-
+margin-top:1rem;
 button{
 
   padding:0;
@@ -138,6 +146,7 @@ button{
   border:none;
   height:auto;
   width:auto;
+  margin-top:2rem;
 }
 div{
 width:4rem;

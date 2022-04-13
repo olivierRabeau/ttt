@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components/macro"
+import devices, {sizes} from '../styles/mediaQueries';
 import { keyframes } from 'styled-components';
 import ReactPlayer from "react-player";
 
@@ -33,8 +34,9 @@ useEffect(()=>{
                   url={moviePath}
                   playing={true}
                   muted={true}
-                  width={"30rem"}
-                  playbackRate={movieSpeed}                  
+                
+                  playbackRate={movieSpeed}
+                  style={{backgroundColor:"red"}}                  
                 />:<Picture src={picturePath} id ="Tom"></Picture> 
               }
           </BigContent>
@@ -54,26 +56,27 @@ export default Player
 //--------------------------------CSS IN JS------------------------------
 
 const SmallContent =styled('div')`
-display:none;
-@media screen and (max-width:1220px) {
-  display:block;
+display:block;
+${devices.laptop} {
+  display:none; 
 }
 `
 const BigContent =styled('div')`
-display:block;
-@media screen and (max-width:1220px) {
-  display:none;
+display:none;
+${devices.laptop} {
+  display:block;
 }
 `
 const Card = styled('div')`
-border-radius:1rem;
 display:flex;
-flex-direction:column;
+border-radius:1rem;
+flex-direction:row;
 align-items:center;
 justify-content:center;
-@media screen and (max-width:1220px) {
-  flex-direction:row;
-  border-bottom:1px solid grey;
+border-bottom:1px solid grey;
+${devices.laptop} {
+  flex-direction:column;
+  border:none;
   margin:0.5rem;
 }
 `
@@ -82,9 +85,9 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-margin-bottom:1rem;
-@media screen and (max-width:1220px) {
-  order:2;  
+order:2;  
+${devices.laptop} {
+order:1;
 }
 `
 const StyledContent = styled('div')`
@@ -104,13 +107,19 @@ padding:1rem;
 }
 `
 const Picture=styled('img') `
+width:5rem;
+border-radius:10rem;
+${devices.laptop} {
+  width:17.5rem;
+  border-radius:2rem;
+  margin:0.5rem;
+}
+${devices.desktop} {
 width:35rem;
 border-radius:2rem;
 margin:0.5rem;
-@media screen and (max-width:1220px) {
-  width:7rem;
-  border-radius:10rem;
 }
+
 `
 const WinPoint=styled('img')`
 height:2.5rem;
@@ -119,8 +128,8 @@ margin:0.5rem;
 border:1px solid white;
 border-radius:0.5rem;
 @media screen and (max-width:1220px) {
-  height:2rem;
-  width:2rem;
+  height:1.5rem;
+  width:1.5rem;
   margin:0.25rem;
 }
 `
