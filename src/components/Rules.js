@@ -23,19 +23,6 @@ const Title =styled('h2')`
   color:yellow;
 `
 const Content = styled('form')`
-position:absolute;
-top:0;
-width:16.8rem;
-height:16.8rem;
-border-radius:1rem;
-background:black;
-${devices.tablet} {
-  width:23rem;
-  height:23rem;
-  background-color:red;
-}
-${devices.desktop} {
-  width:30rem;
-  height:30rem;
-}
+padding:1rem;
+
 `

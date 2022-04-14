@@ -94,9 +94,6 @@ useEffect(()=>{
 
 },[currentCase.turn,selected]);
 
-
-
-
 const initGame = ()=>{ 
   handleNewGame();  
      setCurrentCase({
@@ -109,27 +106,50 @@ const initGame = ()=>{
 
 const Grid = ()=>{
   return(
-    [0,1,2,3,4,5,6,7,8].map((element,index)=>      
-    <Case              
-          key={index} 
-          idVal={index} 
-          availability={currentCase.winFlag?false:currentCase.displays[index].availability} 
-          imgFile={currentCase.displays[index].image}  
-          handleClick={(evt)=>next(evt.target.id)} 
-          handleMouseEnter={evt=>enter(evt)}
-          handleMouseLeave={evt=>leave(evt)}
-          shadow={shadow[index]}
-          bgdC="black"
-    ></Case>)
+    <Appli className="App">  
+    {
+    [0,1,2,3,4,5,6,7,8].map((element,index)=>        
+        <Case              
+              key={index} 
+              idVal={index} 
+              availability={currentCase.winFlag?false:currentCase.displays[index].availability} 
+              imgFile={currentCase.displays[index].image}  
+              handleClick={(evt)=>next(evt.target.id)} 
+              handleMouseEnter={evt=>enter(evt)}
+              handleMouseLeave={evt=>leave(evt)}
+              shadow={shadow[index]}
+              bgdC="black"
+        ></Case>)
+    }
+    </Appli>
   );    
 }
 
-const GamePad = ()=> <Grid/>;
+const GamePad = ()=>{
+  return(
+    <MiniContainer>
+    {
+    [0,1,2,3,4,5,6,7,8].map((element,index)=>        
+        <Case              
+              key={index} 
+              idVal={index} 
+              availability={currentCase.winFlag?false:currentCase.displays[index].availability} 
+              imgFile={currentCase.displays[index].image}  
+              handleClick={(evt)=>next(evt.target.id)} 
+              handleMouseEnter={evt=>enter(evt)}
+              handleMouseLeave={evt=>leave(evt)}
+              shadow={shadow[index]}
+              bgdC="black"
+        ></Case>)
+    }
+      </MiniContainer> 
+  );    
+}
 
 const Selected = ()=>{
   switch (selected) {
     case 0:
-      return <Rules></Rules>;
+      return <Grid></Grid>;
     case 1:    
       return <OptionSetter/>;
     case 2:
@@ -140,32 +160,36 @@ const Selected = ()=>{
 
 
   return (
-    <Container>
-      <Appli className="App"> 
-          {selected===0?<Grid/>:<Selected/>}               
-      </Appli>   
-      <ControlPanel>    
-      <MiniContainer>
-          <GamePad/>
-      </MiniContainer> 
-      <ButtonGroup>
-                  <Button 
-                  type="button" 
-                  onClick={initGame}
-                  disabled={selected===0?false:true}
-                  >New</Button>                  
-                  <Button 
-                  type="button" 
-                  onClick={()=>setSelected(2)}
-                  disabled={selected===0?false:true}
-                  >Rules</Button>
-                  <Button 
-                  type="button" 
-                  onClick={()=>selected===0?setSelected(1):setSelected(0)}
-                  style={{color:selected===0?null:"white", boxShadow:selected===0?null:"0 0 10px white"}}
-                  >{selected===0?"Settings":"Done"}</Button> 
-      </ButtonGroup>
-      </ControlPanel>
+    <Container> 
+
+          <DisplayFrame>
+          <Logo src="LogoPerso3.png" style={{visibility:selected===0?"visible":"hidden"}}></Logo>
+              <Selected/>
+          </DisplayFrame>
+
+          <ControlPanel>       
+
+              <GamePad/>
+
+              <ButtonGroup>
+                          <Button 
+                          type="button" 
+                          onClick={initGame}
+                          disabled={selected===0?false:true}
+                          >New</Button>                  
+                          <Button 
+                          type="button" 
+                          onClick={()=>setSelected(2)}
+                          disabled={selected===0?false:true}
+                          >Rules</Button>
+                          <Button 
+                          type="button" 
+                          onClick={()=>selected===0?setSelected(1):setSelected(0)}
+                          style={{color:selected===0?null:"white", boxShadow:selected===0?null:"0 0 10px white"}}
+                          >{selected===0?"Settings":"Done"}</Button> 
+              </ButtonGroup>
+
+          </ControlPanel>
 
     </Container>   
     
@@ -175,6 +199,45 @@ const Selected = ()=>{
 export default GameGrid;
 
 //--------------------------------CSS IN JS------------------------------
+
+
+const Logo = styled('img')`
+position:absolute; 
+bottom:20px; 
+left:-25px; 
+height:40px; 
+width:30px; 
+${devices.tablet} {
+bottom:30px; 
+left:-25px; 
+height:60px; 
+width:40px; 
+}
+margin:0.5rem;
+border:1px solid white;
+border-radius:0.5rem; 
+box-shadow:0 0 10px white;
+:hover{
+  transform:scale(130%);
+}
+`
+
+const DisplayFrame = styled('div')`
+position:relative; 
+width:18rem;
+height:18rem;
+border-radius:1rem;
+margin-bottom:0.5rem;
+display:flex;
+flex-direction:row;
+justify-content:center;
+align-items:center;
+${devices.tablet} {
+  width:24rem;
+  height:24rem;
+}
+`
+
 
 
 const Container = styled('div')`
@@ -222,11 +285,17 @@ ${devices.tablet} and (max-width:${sizes.laptop}){
 `
 const ButtonGroup =styled('div')`
 display:grid;
-grid-template-columns:repeat(3,1fr);
-justify-content:space-around;
+grid-template-columns:repeat(3,5rem);
+justify-content:center;
 align-items:center;
 margin-top:1rem;
 gap:1rem;
+
+${devices.laptop}{
+  grid-template-columns:repeat(3,7rem);
+  gap:0.5rem;
+}
+
 ${devices.tablet} and (max-width:${sizes.laptop}){
   display:flex;
   margin:1rem;
@@ -235,7 +304,6 @@ ${devices.tablet} and (max-width:${sizes.laptop}){
   flex-direction:column;
   gap:0.5rem; 
 }
-
 `
 const Appli = styled('div')`
 position:relative;
@@ -276,7 +344,7 @@ font-weight:bold;
 border:none;
 border-radius:0.5rem;
 
-width:5rem;
+
 font-size:1rem;
 
 :hover{
@@ -284,8 +352,8 @@ font-size:1rem;
   color:white;
 }
 
-${devices.tablet} {
-  width:100%;
+${devices.tablet} and (max-width:${sizes.laptop}){
+  width:10rem;
   font-size:1.2rem;
 }
 

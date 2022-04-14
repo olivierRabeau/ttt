@@ -13,7 +13,7 @@ const OptionSetter = () => {
     themes.push(th);
   }
   const computerSkills = ["expert","intermediate","beginner"];
-  const firstPlayer=["player","computer","random"];
+  const firstPlayer=["player","computer"];
   const [current, setCurrent] = useState({
     start:0,
     cptrSkills:2,
@@ -85,7 +85,7 @@ export default OptionSetter
 const Picture=styled('img') `
   border:none;
   margin:0;
-  width:7rem;
+  width:5.5rem;
   border-radius:10rem;
   :hover{
     box-shadow:0 0 10px grey;
@@ -103,15 +103,17 @@ justify-items:center;
 justify-content:center;
 align-items:center;
 grid-auto-flow:column;
-margin:auto;
+margin-bottom:0.4rem;
 display:block;
 width:16.8rem;
-padding:1rem;
+height:16.8rem;
+border-radius:1rem;
+
 ${devices.tablet} {
   width:22rem;
 }
 ${devices.desktop} {  
-  width:30rem;
+  width:22rem;
 }
 `
 
@@ -120,7 +122,7 @@ display:flex;
 flex-direction:row;
 justify-content:space-between;
 align-items:center;
-height:4rem;
+height:3.5rem;
 gap:1rem;
 
 font-size:1.2rem;
@@ -146,7 +148,7 @@ button{
   border:none;
   height:auto;
   width:auto;
-  margin-top:2rem;
+  margin-top:0.5rem;
 }
 div{
 width:4rem;

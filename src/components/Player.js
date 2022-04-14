@@ -28,21 +28,9 @@ useEffect(()=>{
         </StyledHeader>
 
         <StyledContent>
-          <BigContent>
-              {winGame?
-                <ReactPlayer
-                  url={moviePath}
-                  playing={true}
-                  muted={true}
-                
-                  playbackRate={movieSpeed}
-                  style={{backgroundColor:"red"}}                  
-                />:<Picture src={picturePath} id ="Tom"></Picture> 
-              }
-          </BigContent>
-          <SmallContent>
+
               <Picture src={picturePath} id ="Tom"></Picture>
-          </SmallContent>          
+            
         </StyledContent>
         <StyledFooter>
           <Message style={{visibility:winGame?"visible":"hidden", color:"yellow"}}>"Win the game"</Message>
@@ -55,18 +43,6 @@ export default Player
 
 //--------------------------------CSS IN JS------------------------------
 
-const SmallContent =styled('div')`
-display:block;
-${devices.laptop} {
-  display:none; 
-}
-`
-const BigContent =styled('div')`
-display:none;
-${devices.laptop} {
-  display:block;
-}
-`
 const Card = styled('div')`
 display:flex;
 border-radius:1rem;
@@ -74,6 +50,7 @@ flex-direction:row;
 align-items:center;
 justify-content:center;
 border-bottom:1px solid grey;
+margin:1rem;
 ${devices.laptop} {
   flex-direction:column;
   border:none;
@@ -94,16 +71,16 @@ const StyledContent = styled('div')`
 display:flex;
 flex-direction:row;
 justify-content:center;
-width:40rem;
-@media screen and (max-width:1220px) {
-  width:auto;
-  order:1;
+order:1;
+${devices.laptop}{
+  order:2;
 }
 `
 const StyledFooter = styled('div')`
-padding:1rem;
-@media screen and (max-width:1220px) {
-  display:none;
+display:none;
+order:3;
+${devices.laptop} { {
+  display:block;
 }
 `
 const Picture=styled('img') `
@@ -117,20 +94,26 @@ ${devices.laptop} {
 ${devices.desktop} {
 width:35rem;
 border-radius:2rem;
-margin:0.5rem;
+margin:2rem;
 }
 
 `
 const WinPoint=styled('img')`
-height:2.5rem;
-width:2.5rem;
-margin:0.5rem;
+height:1.5rem;
+width:1.5rem;
+margin:0.25rem;
+
 border:1px solid white;
 border-radius:0.5rem;
-@media screen and (max-width:1220px) {
-  height:1.5rem;
-  width:1.5rem;
-  margin:0.25rem;
+${devices.laptop}{
+  height:2rem;
+  width:2rem;
+  margin:0.5rem;
+}
+${devices.desktop}{
+  height:2.5rem;
+  width:2.5rem;
+  margin:0.5rem;
 }
 `
 const blink= keyframes`
@@ -141,17 +124,20 @@ const Message=styled('span')`
 animation: ${blink} 0.5s linear alternate;
 animation-iteration-count: infinite;
 font-size:3rem;
-@media screen and (max-width:1220px) {
 display:none;
+${devices.laptop} {
+  display:inline;
+  order:3;
+  font-size:2rem;
 }
 `
 const MessageSmall =styled(Message)`
-display:none;
+display:inline;
 font-size:1rem;
 padding:0.5rem;
 width:100%;
-@media screen and (max-width:1220px) {
-display:inline;
+${devices.laptop} { {
+display:none;
 }
 `
 const WinPointRow = styled('div')`

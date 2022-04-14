@@ -134,6 +134,7 @@ ${devices.laptop} {
 `
 const Grid = styled('div')`
 order:3; 
+width:24rem;
 ${devices.tablet} {
   order:2;                
 }
@@ -161,7 +162,6 @@ ${devices.laptop}{
 const Container = styled('div')`
 display:grid;
 grid-template-rows :repeat(3,auto);
-
 `
 const StyledMain = styled('div')`
 display:flex;
@@ -170,9 +170,11 @@ justify-content:center;
 align-items:center;
 ${devices.laptop}and (max-width:${sizes.desktop}){
   margin-top:2rem;
+  flex-direction:row;
 }
 ${devices.laptop} {
-  flex-direction:row;           
+  flex-direction:row;
+          
 }
 `
 export default App;
