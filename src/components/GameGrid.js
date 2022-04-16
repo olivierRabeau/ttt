@@ -280,7 +280,7 @@ ${devices.tablet} and (max-width:${sizes.laptop}){
   display:flex;
   flex-direction:row;
   justify-content:space-between;
-  z-index:1;
+  z-index:-1;
 }
 `
 const ButtonGroup =styled('div')`
