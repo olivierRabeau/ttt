@@ -232,6 +232,7 @@ display:flex;
 flex-direction:row;
 justify-content:center;
 align-items:center;
+z-index:10;
 ${devices.tablet} {
   width:24rem;
   height:24rem;
@@ -280,7 +281,7 @@ ${devices.tablet} and (max-width:${sizes.laptop}){
   display:flex;
   flex-direction:row;
   justify-content:space-between;
-  z-index:-1;
+
 }
 `
 const ButtonGroup =styled('div')`

@@ -97,7 +97,6 @@ display:block;
 width:16.8rem;
 height:16.8rem;
 border-radius:1rem;
-
 ${devices.tablet} {
   width:22rem;
 }
