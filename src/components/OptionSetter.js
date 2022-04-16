@@ -1,4 +1,4 @@
-import React,{useState,useContext, useEffect} from 'react';
+import React,{useContext} from 'react';
 import players,{theme} from "../styles/themes";
 import styled from "styled-components/macro";
 import devices from '../styles/mediaQueries';
@@ -14,22 +14,11 @@ const OptionSetter = () => {
   }
   const computerSkills = ["expert","intermediate","beginner"];
   const firstPlayer=["player","computer"];
-  const [current, setCurrent] = useState({
-    start:0,
-    cptrSkills:2,
-    theming:'avengers',
-    avatar:0,
-    computer:1
-  })
 
 const handleAvatar =(evt)=>setUserSettings({...userSettings,avatar:parseInt(evt.target.id), computer:parseInt(evt.target.id)===0?1:0});
 const handleThm =(evt)=>setUserSettings({...userSettings,theming:evt.target.value});
 const handleCptrSkills =(evt)=>setUserSettings({...userSettings,cptrSkills:parseInt(evt.target.value)});
 const handleFirst =(evt)=>setUserSettings({...userSettings,start:parseInt(evt.target.value)});
-
-useEffect(()=>{
-  setCurrent({...userSettings});
-},[]);
 
   return (
     <div>

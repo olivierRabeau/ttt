@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Case from './Case.js';
 import styled from 'styled-components/macro';
 import devices,{sizes} from '../styles/mediaQueries.js';
-import { useState,useContext } from 'react';
+import { useState,useContext, useCallback } from 'react';
 import nextPlayer from '../utilities/nextPlayer.js';
 import findTheBestOption from '../utilities/findTheBestOption.js';
 import winPatternScore from '../utilities/winPatternScore.js';
@@ -37,7 +37,7 @@ const [currentCase, setCurrentCase] = useState({
 });
 
 // Mise à jour du State suite à la sélection d'une case par un joueur
-const next = (id) => {
+const next = useCallback((id) => {
   const upToDateState = nextPlayer(
     currentCase,
     id,
@@ -50,7 +50,7 @@ const next = (id) => {
     turn:upToDateState.turn,
     winFlag:upToDateState.winFlag
   });
-}
+},[currentCase, userSettings])
 
 
 const enter = (evt) =>{
@@ -92,7 +92,7 @@ useEffect(()=>{
     return ()=>clearTimeout(tempo);
   }
 
-},[currentCase.turn,selected]);
+},[currentCase,selected,userSettings,handleStateWins, next]);
 
 const initGame = ()=>{ 
   handleNewGame();  

@@ -1,5 +1,5 @@
 // filePath from index.html to resources folder
-const folderPath = "./resources/";
+const folderPath = "./";
 
 const nameIs = (avatar)=> folderPath + avatar;
 
@@ -19,7 +19,6 @@ const avatar = (path) =>(
     {
         picture:path + ".png",
         mark:path + "_mk.png",
-        movie:path + "_mv.mp4"
     }
 );
 

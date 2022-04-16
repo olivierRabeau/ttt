@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from "styled-components/macro";
-import devices from '../styles/mediaQueries';
 
 const Rules = () => {
   return (

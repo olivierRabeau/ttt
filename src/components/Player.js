@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components/macro"
-import devices, {sizes} from '../styles/mediaQueries';
+import devices from '../styles/mediaQueries';
 import { keyframes } from 'styled-components';
-import ReactPlayer from "react-player";
 
 const Player = ({picturePath,logoPath,moviePath,movieSpeed,winGames,winGame}) => {
 const [current,setCurrent] =useState({

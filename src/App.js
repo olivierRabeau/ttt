@@ -4,7 +4,7 @@ import GameGrid from './components/GameGrid.js'
 import styled from 'styled-components/macro'
 import Player from './components/Player';
 import Title from './components/Title'
-import {useState,createContext, useEffect } from 'react';
+import {useState,createContext} from 'react';
 import players from "../src/styles/themes";
 
 
